@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vida Digital — Elementary · PCIS Family Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:#1a4d8f; --navy-dk:#123870; --navy-lt:#2563b0;
+    --teal:#0f6e56; --teal-lt:#e1f5ee;
+    --text:#202124; --muted:#5f6368; --border:#e0e0e0; --bg:#f8f9fa; --white:#ffffff;
+    --radius:10px; --radius-lg:14px;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;font-size:15px;color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block} a{color:inherit;text-decoration:none}
+  body.en [data-lang="es"]{display:none} body:not(.en) [data-lang="en"]{display:none}
+
+  .lang-bar{background:var(--navy-dk);padding:6px 40px;display:flex;justify-content:flex-end;align-items:center;gap:8px}
+  .lang-btn{background:transparent;border:1px solid rgba(255,255,255,0.35);color:rgba(255,255,255,0.75);font-size:11px;font-family:'Inter',sans-serif;padding:3px 12px;border-radius:20px;cursor:pointer;transition:all .2s}
+  .lang-btn.active{background:rgba(255,255,255,0.18);color:#fff;border-color:rgba(255,255,255,0.6)}
+
+  .nav{background:var(--navy);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .nav-logo{display:flex;align-items:center;gap:12px;cursor:pointer}
+  .nav-logo-img{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+  .nav-logo-img .initials{font-size:13px;font-weight:600;color:var(--navy)}
+  .nav-title strong{display:block;color:#fff;font-size:14px;font-weight:600}
+  .nav-title small{color:rgba(255,255,255,0.65);font-size:11px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,0.82);font-size:13px;padding:8px 14px;border-radius:6px;transition:background .18s,color .18s;cursor:pointer}
+  .nav-links a:hover{background:rgba(255,255,255,0.12);color:#fff}
+  .nav-burger{display:none;background:none;border:none;cursor:pointer;padding:6px}
+  .nav-burger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;margin:4px 0}
+  .nav-drawer{display:none;background:var(--navy-dk);padding:12px 20px 20px;flex-direction:column;gap:4px}
+  .nav-drawer a{color:rgba(255,255,255,0.85);font-size:14px;padding:10px 12px;border-radius:6px;display:block}
+  .nav-drawer.open{display:flex}
+
+  .back-bar{background:#1a4d8f;padding:10px 40px}
+  .back-bar a{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.85);font-size:12px;font-weight:500}
+  .hero-sm{background:#1a4d8f;padding:48px 40px 40px;text-align:center}
+  .hero-sm h1{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,40px);color:#fff;margin-bottom:14px}
+  .hero-sm p{color:rgba(255,255,255,.75);font-size:15px;line-height:1.7;max-width:560px;margin:0 auto}
+  .hero-img{width:100%;max-height:340px;object-fit:cover}
+
+  .section{padding:56px 40px}
+  .section-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:10px}
+  .section h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.25}
+  .lead{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:0}
+  .divider{border:none;border-top:1px solid var(--border)}
+
+  /* STAT CARDS */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:28px}
+  .stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;text-align:center}
+  .stat-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:600;color:var(--navy);margin-bottom:6px}
+  .stat-label{font-size:12px;color:var(--muted);line-height:1.5}
+
+  /* INFO CARDS */
+  .info-card{background:#e3f2fd;border-radius:var(--radius-lg);padding:20px;display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+  .info-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .info-card h3{font-size:14px;font-weight:600;color:#0d47a1;margin-bottom:5px}
+  .info-card p{font-size:13px;color:#1565c0;line-height:1.6}
+
+  /* MYTH VS FACT */
+  .myth-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+  .myth-box{border-radius:var(--radius-lg);padding:20px}
+  .myth-box h4{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  .myth-box p{font-size:13px;line-height:1.65}
+
+  /* ACCORDION */
+  .acc-item{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:10px}
+  .acc-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;gap:12px}
+  .acc-head:hover{background:var(--bg)}
+  .acc-num{width:28px;height:28px;border-radius:50%;background:#e3f2fd;color:#0d47a1;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+  .acc-title{font-size:14px;font-weight:500;color:var(--text);flex:1}
+  .acc-arr{width:28px;height:28px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted);flex-shrink:0}
+  .acc-body{display:none;padding:14px 20px;font-size:13px;color:var(--muted);line-height:1.75;border-top:1px solid var(--bg)}
+
+  /* CONVO STARTERS */
+  .convo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:24px}
+  .convo-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;display:flex;gap:12px;align-items:flex-start}
+  .convo-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+  .convo-card p{font-size:13px;color:var(--muted);line-height:1.6}
+
+  /* RED FLAGS */
+  .flag-list{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:10px}
+  .flag-list li{display:flex;align-items:flex-start;gap:12px;background:#fff3e0;border-radius:var(--radius);padding:14px 16px;font-size:13px;color:#e65100;line-height:1.55}
+  .flag-list li::before{content:'⚠';flex-shrink:0}
+
+  /* EXT RESOURCES */
+  .ext-link{background:#e3f2fd;border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;margin-bottom:10px;transition:opacity .18s}
+  .ext-link:hover{opacity:.85}
+  .ext-link h3{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+  .ext-link p{font-size:12px;color:var(--muted);line-height:1.5}
+  .ext-link span{font-size:11px;color:#185FA5;font-weight:500;margin-top:6px;display:inline-block}
+
+  .download-item{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:10px}
+  .download-item-left{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:var(--text)}
+  .download-btn{background:var(--navy);color:#fff;font-size:12px;font-weight:600;padding:8px 16px;border-radius:20px;white-space:nowrap}
+
+  .contact-bar{background:var(--navy);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 40px;flex-wrap:wrap}
+  .contact-info h3{font-size:15px;font-weight:600;color:#fff;margin-bottom:3px}
+  .contact-info p{font-size:13px;color:rgba(255,255,255,.7)}
+  .contact-email{background:#fff;color:var(--navy);font-size:13px;font-weight:600;padding:10px 22px;border-radius:24px;white-space:nowrap}
+  footer{background:var(--navy-dk);color:rgba(255,255,255,.6);text-align:center;padding:20px;font-size:12px}
+  footer nav{margin-top:8px;display:flex;justify-content:center;gap:20px}
+  footer a{color:rgba(255,255,255,.5)}
+  footer a:hover{color:#fff}
+
+  @media(max-width:640px){
+    .lang-bar,.nav,.back-bar,.section,.contact-bar{padding-left:16px;padding-right:16px}
+    .nav-links{display:none} .nav-burger{display:block}
+    .myth-grid{grid-template-columns:1fr}
+    .stat-grid{grid-template-columns:1fr 1fr}
+    .hero-sm{padding:36px 16px 32px}
+  }
+</style>
+</head>
+<body>
+<div class="lang-bar">
+  <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+  <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+</div>
+<nav class="nav">
+  <a class="nav-logo" href="../index.html">
+    <div class="nav-logo-img"><span class="initials">PC</span></div>
+    <div class="nav-title"><strong>PCIS Family Hub</strong><small>Elementary</small></div>
+  </a>
+  <div class="nav-links">
+    <a href="../elementary.html"><span data-lang="es">Elementary</span><span data-lang="en">Elementary</span></a>
+    <a href="../index.html">Hub</a>
+  </div>
+  <button class="nav-burger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="../elementary.html" onclick="closeDrawer()">Elementary</a>
+  <a href="../index.html" onclick="closeDrawer()">Hub</a>
+</div>
+
+<div class="back-bar"><a href="../elementary.html">← <span data-lang="es">Volver a Elementary</span><span data-lang="en">Back to Elementary</span></a></div>
+
+<section class="hero-sm">
+  <h1>📱 <span data-lang="es">Vida Digital</span><span data-lang="en">Digital Life</span></h1>
+  <p data-lang="es">La tecnología es parte de la vida de nuestros hijos. El objetivo no es eliminarla — es enseñarles a usarla de manera saludable, consciente y segura.</p>
+  <p data-lang="en">Technology is part of our children's lives. The goal is not to eliminate it — it's to teach them to use it in a healthy, conscious and safe way.</p>
+</section>
+<img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1200&q=80" alt="Familia con tecnología" class="hero-img" onerror="this.style.display='none'">
+
+<!-- DATOS CLAVE -->
+<section class="section">
+  <p class="section-label"><span data-lang="es">Lo que dice la investigación</span><span data-lang="en">What the research says</span></p>
+  <h2><span data-lang="es">Números que todo padre debe conocer</span><span data-lang="en">Numbers every parent should know</span></h2>
+  <p class="lead"><span data-lang="es">Datos del Common Sense Census 2025 y del Youth AI Safety Institute — las fuentes más completas sobre niños y tecnología.</span><span data-lang="en">Data from the 2025 Common Sense Census and the Youth AI Safety Institute — the most comprehensive sources on kids and technology.</span></p>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-num">1 de 4</div><div class="stat-label"><span data-lang="es">niños tiene su propio celular a los 8 años (Census 2025)</span><span data-lang="en">children have their own cellphone by age 8 (2025 Census)</span></div></div>
+    <div class="stat-card"><div class="stat-num">5h 33m</div><div class="stat-label"><span data-lang="es">promedio diario de pantallas de entretenimiento en tweens 8–12 (Census 2021)</span><span data-lang="en">average daily entertainment screen time for tweens 8–12 (2021 Census)</span></div></div>
+    <div class="stat-card"><div class="stat-num">86%</div><div class="stat-label"><span data-lang="es">de niños de 9–17 años usa inteligencia artificial (Census IA 2026)</span><span data-lang="en">of children ages 9–17 use artificial intelligence (2026 AI Census)</span></div></div>
+    <div class="stat-card"><div class="stat-num">38%</div><div class="stat-label"><span data-lang="es">de tweens usaba redes sociales en 2021 — y la mayoría no tenía 13 años</span><span data-lang="en">of tweens were using social media in 2021 — most under age 13</span></div></div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- MITO vs HECHO -->
+<section class="section" style="background:var(--bg)">
+  <p class="section-label"><span data-lang="es">Mito vs. Realidad</span><span data-lang="en">Myth vs. Fact</span></p>
+  <h2><span data-lang="es">Lo que creemos vs. lo que dice la ciencia</span><span data-lang="en">What we believe vs. what the science says</span></h2>
+  <div class="myth-grid">
+    <div class="myth-box" style="background:#fce4ec">
+      <h4 style="color:#c62828">❌ <span data-lang="es">Mito</span><span data-lang="en">Myth</span></h4>
+      <p style="color:#7f0000"><span data-lang="es">La edad de 13 años en las redes sociales es una calificación de seguridad — si tiene 13, ya está listo.</span><span data-lang="en">The age-13 rule on social media is a safety rating — if they're 13, they're ready.</span></p>
+    </div>
+    <div class="myth-box" style="background:#e8f5e9">
+      <h4 style="color:#1b5e20">✅ <span data-lang="es">Realidad</span><span data-lang="en">Fact</span></h4>
+      <p style="color:#1b5e20"><span data-lang="es">El 13 es la edad de consentimiento para el rastreo de datos según la ley COPPA (1998) — no es una evaluación de madurez. Common Sense recomienda la mayoría de las redes sociales para 15–16 años.</span><span data-lang="en">Age 13 is the data-tracking consent age under COPPA (1998) — not a maturity rating. Common Sense rates most social platforms appropriate for ages 15–16.</span></p>
+    </div>
+    <div class="myth-box" style="background:#fce4ec">
+      <h4 style="color:#c62828">❌ <span data-lang="es">Mito</span><span data-lang="en">Myth</span></h4>
+      <p style="color:#7f0000"><span data-lang="es">Prohibir las pantallas es la mejor protección.</span><span data-lang="en">Banning screens is the best protection.</span></p>
+    </div>
+    <div class="myth-box" style="background:#e8f5e9">
+      <h4 style="color:#1b5e20">✅ <span data-lang="es">Realidad</span><span data-lang="en">Fact</span></h4>
+      <p style="color:#1b5e20"><span data-lang="es">Common Sense recomienda acuerdos familiares + conversaciones abiertas. Las prohibiciones sin diálogo no desarrollan autorregulación.</span><span data-lang="en">Common Sense recommends family agreements + open conversations. Bans without dialogue don't build self-regulation.</span></p>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- TEMAS CLAVE -->
+<section class="section">
+  <p class="section-label"><span data-lang="es">Temas esenciales</span><span data-lang="en">Key topics</span></p>
+  <h2><span data-lang="es">Lo que necesitas saber como familia</span><span data-lang="en">What your family needs to know</span></h2>
+  <p class="lead" style="margin-bottom:28px"><span data-lang="es">Haz clic en cada tema para ver información y consejos prácticos.</span><span data-lang="en">Click each topic to see information and practical tips.</span></p>
+
+  <!-- Tiempo de pantalla -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">⏱</div>
+      <span class="acc-title"><span data-lang="es">Tiempo de pantalla (7–12 años)</span><span data-lang="en">Screen time (ages 7–12)</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es"><strong>No existe un número mágico.</strong> Common Sense Media enfoca la calidad del contenido y el equilibrio con actividades sin pantalla, más que un límite exacto de minutos. Los tweens promedian 5 horas y media diarias de pantallas de entretenimiento. Common Sense clasifica el tiempo de pantalla en cuatro tipos: <strong>pasivo</strong> (ver videos), <strong>interactivo</strong> (juegos), <strong>de comunicación</strong> (mensajes) y <strong>de creación</strong> (diseño, código) — y no todos son iguales.</span><span data-lang="en"><strong>There's no magic number.</strong> Common Sense focuses on content quality and balance with off-screen life rather than a strict minute count. Tweens average about 5.5 hours of daily entertainment screen media. Common Sense sorts screen time into four types: <strong>passive</strong> (watching), <strong>interactive</strong> (gaming), <strong>communication</strong> (messaging), and <strong>creation</strong> (designing, coding) — and they're not all equal.</span></p>
+      <p style="margin-top:12px"><strong><span data-lang="es">Consejos:</span><span data-lang="en">Tips:</span></strong></p>
+      <ul style="margin-top:8px;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)">
+        <li><span data-lang="es">Protege el sueño: sin pantallas 30–60 minutos antes de dormir. Los niños de edad escolar necesitan 9–12 horas (AAP).</span><span data-lang="en">Protect sleep: no screens 30–60 minutes before bed. School-age children need 9–12 hours (AAP).</span></li>
+        <li><span data-lang="es">Modela el hábito: los adultos promedian 9 horas diarias en pantallas — los hijos aprenden de lo que ven.</span><span data-lang="en">Model it: adults average 9 hours a day on screens — kids learn habits from us.</span></li>
+        <li><span data-lang="es">Usa el Family Tech Planner gratuito de Common Sense (disponible por edades, incluye 9–12 años).</span><span data-lang="en">Use Common Sense's free Family Tech Planner (available by age group, including ages 9–12).</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Primer teléfono -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">📱</div>
+      <span class="acc-title"><span data-lang="es">El primer teléfono — ¿cuándo?</span><span data-lang="en">First phone — when?</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es">Common Sense lo dice claramente: <em>"La edad correcta depende de ti. La madurez de tu hijo, su capacidad de seguir reglas, su sentido de responsabilidad y las necesidades de tu familia importan más que la edad."</em> La mayoría recibe su primer teléfono alrededor de los 11 años. Considera primero un teléfono básico o un reloj inteligente.</span><span data-lang="en">Common Sense is explicit: <em>"The right age is really up to you. Your child's maturity, ability to follow rules, sense of responsibility, and your family's needs matter more than age."</em> Most kids get a first phone around age 11. Consider a basic phone or kid smartwatch first.</span></p>
+      <p style="margin-top:12px;font-size:13px;color:var(--muted)"><strong><span data-lang="es">Preguntas de preparación:</span><span data-lang="en">Readiness questions:</span></strong><br><span data-lang="es">¿Tu hijo te dice dónde está y llega cuando dice? ¿Puede seguir las reglas del hogar? ¿Sus habilidades tecnológicas superan su madurez? Si la última es "sí" — "todavía no" es una respuesta válida.</span><span data-lang="en">Does your child tell you where they are and follow through? Can they follow home rules? Do their tech skills outpace their judgment? If that last one is "yes" — "not yet" is a valid answer.</span></p>
+    </div>
+  </div>
+
+  <!-- Seguridad online -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">🔒</div>
+      <span class="acc-title"><span data-lang="es">Seguridad básica en línea</span><span data-lang="en">Online safety basics</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es">Información que <strong>nunca</strong> se comparte en línea: nombre completo, fecha de nacimiento, dirección, nombre de la escuela y nombres de familiares. Ajusten juntos la configuración de privacidad: limita los servicios de ubicación, usa navegadores seguros y rechaza cookies de rastreo. Habla sobre los "desconocidos en línea" en juegos y chats — como el "cuidado con los extraños" pero para el mundo digital.</span><span data-lang="en">Information that should <strong>never</strong> be shared online: full name, birth date, home address, school name, and family members' names. Tighten privacy settings together: manage location services, use secure browsers, and reject tracking cookies. Talk about "strangers online" in games and chats — like "stranger danger" but for the digital world.</span></p>
+    </div>
+  </div>
+
+  <!-- Redes sociales -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">👥</div>
+      <span class="acc-title"><span data-lang="es">Redes sociales y el límite de los 13 años</span><span data-lang="en">Social media and the age-13 rule</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es">El límite de 13 años <strong>no es una calificación de seguridad</strong>. Es la edad de consentimiento para el rastreo de datos según la ley COPPA (1998). Common Sense califica la mayoría de las apps sociales para <strong>15 a 16 años</strong>. Aun así, el 38% de los tweens ya usaba redes sociales en 2021. El tiempo extra de madurez ayuda a los niños a manejar mejor un mundo social impredecible.</span><span data-lang="en">The age-13 rule is <strong>not a safety rating</strong>. It's the data-tracking consent age under COPPA (1998). Common Sense rates most social apps for <strong>ages 15–16</strong>. Even so, 38% of tweens were already using social media in 2021. The extra maturing time helps kids handle the unpredictable social world online.</span></p>
+    </div>
+  </div>
+
+  <!-- IA para niños -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">🤖</div>
+      <span class="acc-title"><span data-lang="es">Inteligencia artificial para niños</span><span data-lang="en">AI for kids</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es">El 86% de los niños de 9–17 años usa IA y el 52% la usa semanalmente. Casi un tercio de los padres de niños de 8 años o menos reporta que su hijo ha usado IA para aprender en la escuela.</span><span data-lang="en">86% of kids ages 9–17 use AI and 52% use it at least weekly. Nearly one-third of parents of children age 8 or under report their child has used AI for school-related learning.</span></p>
+      <p style="margin-top:10px;font-size:13px;color:var(--muted)"><strong><span data-lang="es">Guía de Common Sense por edad:</span><span data-lang="en">Common Sense age guidance:</span></strong></p>
+      <ul style="margin-top:8px;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)">
+        <li><span data-lang="es"><strong>Niños pequeños:</strong> sin chatbots de IA — no distinguen bien la IA de una persona real.</span><span data-lang="en"><strong>Young children:</strong> no AI chatbots — they can't fully tell AI from real people.</span></li>
+        <li><span data-lang="es"><strong>Tweens (10–12):</strong> uso limitado y <strong>siempre acompañado de un adulto</strong>.</span><span data-lang="en"><strong>Tweens (10–12):</strong> limited use, <strong>always alongside a parent or caregiver</strong>.</span></li>
+        <li><span data-lang="es"><strong>Juguetes con IA:</strong> evitar en menores de 5; extrema precaución de 6 a 12 años.</span><span data-lang="en"><strong>AI toys:</strong> avoid under age 5; extreme caution ages 6–12.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Controles parentales -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">🛡</div>
+      <span class="acc-title"><span data-lang="es">Controles parentales</span><span data-lang="en">Parental controls</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <ul style="padding-left:18px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted)">
+        <li><strong>Apple Screen Time</strong> — <span data-lang="es">límites por app, horario de "Descanso", Family Sharing.</span><span data-lang="en">per-app limits, Downtime/bedtime, Family Sharing.</span></li>
+        <li><strong>Google Family Link</strong> — <span data-lang="es">para menores de 13 en Android: límites de tiempo y contenido.</span><span data-lang="en">for under-13 Android users: time and content limits.</span></li>
+        <li><strong>Bark</strong> — <span data-lang="es">alertas en tiempo real para redes sociales y mensajes.</span><span data-lang="en">real-time alerts for social media and messaging.</span></li>
+        <li><strong>Router / ISP</strong> — <span data-lang="es">pausar internet, filtrar contenido.</span><span data-lang="en">pause the internet, filter content.</span></li>
+      </ul>
+      <p style="margin-top:12px;font-size:13px;color:var(--muted);background:#fff3e0;border-radius:8px;padding:12px"><span data-lang="es">⚠ <strong>Advertencia honesta:</strong> ningún control parental es infalible. Common Sense enfatiza que los controles <em>apoyan</em> la crianza, no la reemplazan. Las conversaciones son insustituibles.</span><span data-lang="en">⚠ <strong>Honest caveat:</strong> no parental control is foolproof. Common Sense stresses that controls <em>support</em> parenting, not replace it. Conversations are irreplaceable.</span></p>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SEÑALES DE ALERTA -->
+<section class="section" style="background:var(--bg)">
+  <p class="section-label"><span data-lang="es">Señales de alerta</span><span data-lang="en">Red flags</span></p>
+  <h2><span data-lang="es">¿Cuándo debo preocuparme?</span><span data-lang="en">When should I be concerned?</span></h2>
+  <ul class="flag-list">
+    <li><span data-lang="es">El uso de pantallas desplaza el sueño, la actividad física, las tareas o las amistades presenciales.</span><span data-lang="en">Screen use crowds out sleep, physical activity, homework, or in-person friendships.</span></li>
+    <li><span data-lang="es">Irritabilidad o berrinches cuando se pide dejar el dispositivo.</span><span data-lang="en">Irritability or tantrums when asked to stop using a device.</span></li>
+    <li><span data-lang="es">Esconder el dispositivo o usarlo a escondidas.</span><span data-lang="en">Hiding or sneaking device use.</span></li>
+    <li><span data-lang="es">Tratar a un chatbot de IA como un amigo o confidente.</span><span data-lang="en">Treating an AI chatbot like a friend or confidant.</span></li>
+    <li><span data-lang="es">Usar la IA para reemplazar el pensamiento propio en las tareas escolares.</span><span data-lang="en">Using AI to replace their own thinking on schoolwork.</span></li>
+  </ul>
+</section>
+<hr class="divider">
+
+<!-- TIPS PARA PADRES -->
+<section class="section">
+  <p class="section-label"><span data-lang="es">Tips para padres</span><span data-lang="en">Tips for parents</span></p>
+  <h2><span data-lang="es">¿Cómo puedo apoyar a mi hijo?</span><span data-lang="en">How can I support my child?</span></h2>
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-num">1</div><span class="acc-title"><span data-lang="es">Crea un acuerdo tecnológico familiar</span><span data-lang="en">Create a family tech agreement</span></span><span class="acc-arr">+</span></div>
+    <div class="acc-body"><span data-lang="es">En lugar de prohibir, establezcan juntos horarios, zonas sin pantallas y qué apps están permitidas. Common Sense ofrece Family Tech Planners gratuitos por edad.</span><span data-lang="en">Instead of banning, set schedules, screen-free zones, and which apps are allowed — together. Common Sense offers free Family Tech Planners by age.</span></div>
+  </div>
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-num">2</div><span class="acc-title"><span data-lang="es">Sé el modelo que quieres ver</span><span data-lang="en">Be the model you want to see</span></span><span class="acc-arr">+</span></div>
+    <div class="acc-body"><span data-lang="es">Si quieres que pongan el teléfono durante la cena, tú también debes hacerlo. Los hijos aprenden de lo que observan, no de lo que escuchan.</span><span data-lang="en">If you want them to put the phone away at meals, you must do it too. Kids learn from what they observe, not what they hear.</span></div>
+  </div>
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-num">3</div><span class="acc-title"><span data-lang="es">Haz el "test drive" de apps juntos</span><span data-lang="en">Do an app "test drive" together</span></span><span class="acc-arr">+</span></div>
+    <div class="acc-body"><span data-lang="es">Antes de que tu hijo use una app nueva — incluyendo IA — explórenla juntos. Entiende qué hace bien y dónde falla. Revisa las calificaciones de privacidad de Common Sense antes de descargar.</span><span data-lang="en">Before your child uses a new app — including AI — explore it together first. Understand what it does well and where it fails. Check Common Sense's privacy ratings before downloading.</span></div>
+  </div>
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)"><div class="acc-num">4</div><span class="acc-title"><span data-lang="es">Establece reglas de dormitorio</span><span data-lang="en">Set bedroom rules</span></span><span class="acc-arr">+</span></div>
+    <div class="acc-body"><span data-lang="es">Carga los teléfonos durante la noche en un espacio común, no en el dormitorio del niño. Esto protege el sueño y reduce el uso nocturno sin supervisión.</span><span data-lang="en">Charge phones overnight in a shared space, not in the child's bedroom. This protects sleep and reduces unsupervised nighttime use.</span></div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- CONVERSACIONES -->
+<section class="section" style="background:var(--bg)">
+  <p class="section-label"><span data-lang="es">Para iniciar la conversación</span><span data-lang="en">Conversation starters</span></p>
+  <h2><span data-lang="es">¿Cómo hablo de esto con mi hijo?</span><span data-lang="en">How do I talk to my child about this?</span></h2>
+  <p class="lead"><span data-lang="es">Preguntas abiertas, sin juicio, para abrir el diálogo.</span><span data-lang="en">Open-ended, judgment-free questions to open the dialogue.</span></p>
+  <div class="convo-grid">
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">¿Qué te gusta hacer en línea y por qué?</span><span data-lang="en">What do you like to do online, and why?</span></p></div>
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">¿Qué harías si una persona que no conoces te enviara un mensaje?</span><span data-lang="en">What would you do if someone you don't know messaged you?</span></p></div>
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">¿Alguna vez viste algo en línea que te hiciera sentir raro, triste o confundido?</span><span data-lang="en">Have you ever seen something online that made you feel weird, sad, or confused?</span></p></div>
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">¿Qué información sobre ti crees que debe quedarse en privado?</span><span data-lang="en">What information about you should stay private?</span></p></div>
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">Enséñame tu juego o app favorita.</span><span data-lang="en">Show me your favorite game or app.</span></p></div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- RECURSOS DESCARGABLES -->
+<section class="section">
+  <p class="section-label"><span data-lang="es">Recursos descargables</span><span data-lang="en">Downloadable resources</span></p>
+  <h2><span data-lang="es">Materiales para familias</span><span data-lang="en">Materials for families</span></h2>
+  <div style="margin-top:24px">
+    <div class="download-item">
+      <div class="download-item-left">📄 <span data-lang="es">Guía de vida digital para familias Elementary</span><span data-lang="en">Digital life family guide — Elementary</span></div>
+      <a href="../404.html" class="download-btn"><span data-lang="es">Descargar</span><span data-lang="en">Download</span></a>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- RECURSOS EXTERNOS -->
+<section class="section" style="background:var(--bg)">
+  <p class="section-label"><span data-lang="es">Recursos externos recomendados</span><span data-lang="en">Recommended external resources</span></p>
+  <h2><span data-lang="es">Más información para familias</span><span data-lang="en">More information for families</span></h2>
+  <div style="margin-top:24px">
+    <a href="https://www.commonsensemedia.org/parents-ultimate-guides" target="_blank" rel="noopener" class="ext-link">
+      <div style="font-size:24px;flex-shrink:0">📱</div>
+      <div><h3><span data-lang="es">Guías para padres — Common Sense Media</span><span data-lang="en">Parents' Ultimate Guides — Common Sense Media</span></h3><p><span data-lang="es">Guías prácticas por edad y tema: primer teléfono, redes sociales, IA, controles parentales y más.</span><span data-lang="en">Practical guides by age and topic: first phone, social media, AI, parental controls and more.</span></p><span>commonsensemedia.org →</span></div>
+    </a>
+    <a href="https://institute.commonsensemedia.org/" target="_blank" rel="noopener" class="ext-link" style="background:#e8f5e9">
+      <div style="font-size:24px;flex-shrink:0">🤖</div>
+      <div><h3><span data-lang="es">Youth AI Safety Institute</span><span data-lang="en">Youth AI Safety Institute</span></h3><p><span data-lang="es">Evaluaciones de riesgo de productos de IA para niños y familias — actualizadas regularmente.</span><span data-lang="en">AI product risk assessments for children and families — updated regularly.</span></p><span>institute.commonsensemedia.org →</span></div>
+    </a>
+    <a href="https://www.commonsensemedia.org/articles/parents-ultimate-guide-to-parental-controls" target="_blank" rel="noopener" class="ext-link" style="background:#fff8e1">
+      <div style="font-size:24px;flex-shrink:0">🛡</div>
+      <div><h3><span data-lang="es">Guía completa de controles parentales</span><span data-lang="en">Ultimate guide to parental controls</span></h3><p><span data-lang="es">Cómo configurar Apple Screen Time, Google Family Link, Bark y controles del router.</span><span data-lang="en">How to set up Apple Screen Time, Google Family Link, Bark and router controls.</span></p><span>commonsensemedia.org →</span></div>
+    </a>
+    <a href="https://kidshealth.org/" target="_blank" rel="noopener" class="ext-link" style="background:#f3e5f5">
+      <div style="font-size:24px;flex-shrink:0">🏥</div>
+      <div><h3>KidsHealth</h3><p><span data-lang="es">Información médica y de salud mental revisada por médicos para niños, adolescentes y padres.</span><span data-lang="en">Doctor-reviewed medical and mental health information for kids, teens and parents.</span></p><span>kidshealth.org →</span></div>
+    </a>
+  </div>
+</section>
+<hr class="divider">
+
+<div class="contact-bar">
+  <div class="contact-info">
+    <h3><span data-lang="es">¿Tienes preguntas sobre este tema?</span><span data-lang="en">Have questions about this topic?</span></h3>
+    <p><span data-lang="es">La consejera escolar está aquí para apoyarte.</span><span data-lang="en">The school counselor is here to support you.</span></p>
+  </div>
+  <a class="contact-email" href="../elementary.html">← <span data-lang="es">Volver a Elementary</span><span data-lang="en">Back to Elementary</span></a>
+</div>
+<footer><p>© 2026 Puntacana International School · PCIS Family Hub</p><nav><a href="../index.html">Hub</a><a href="../elementary.html">Elementary</a></nav></footer>
+
+<script>
+function setLang(l){document.body.classList.toggle('en',l==='en');document.getElementById('btn-es').classList.toggle('active',l==='es');document.getElementById('btn-en').classList.toggle('active',l==='en');localStorage.setItem('pcis-lang',l);}
+(function(){if(localStorage.getItem('pcis-lang')==='en')setLang('en');})();
+function toggleDrawer(){document.getElementById('nav-drawer').classList.toggle('open')}
+function closeDrawer(){document.getElementById('nav-drawer').classList.remove('open')}
+function toggleAcc(h){var b=h.nextElementSibling;var open=b.style.display==='block';b.style.display=open?'none':'block';h.querySelector('.acc-arr').textContent=open?'+':'−';}
+</script>
+</body></html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vida Digital — Senior · PCIS Family Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --purple:#534AB7; --purple-dk:#3d3590; --purple-lt:#EEEDFE;
+    --teal:#0f6e56; --teal-lt:#e1f5ee;
+    --text:#202124; --muted:#5f6368; --border:#e0e0e0; --bg:#f8f9fa; --white:#ffffff;
+    --radius:10px; --radius-lg:14px;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;font-size:15px;color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block} a{color:inherit;text-decoration:none}
+  body.en [data-lang="es"]{display:none} body:not(.en) [data-lang="en"]{display:none}
+
+  .lang-bar{background:var(--purple-dk);padding:6px 40px;display:flex;justify-content:flex-end;align-items:center;gap:8px}
+  .lang-btn{background:transparent;border:1px solid rgba(255,255,255,0.35);color:rgba(255,255,255,0.75);font-size:11px;font-family:'Inter',sans-serif;padding:3px 12px;border-radius:20px;cursor:pointer;transition:all .2s}
+  .lang-btn.active{background:rgba(255,255,255,0.18);color:#fff;border-color:rgba(255,255,255,0.6)}
+
+  .nav{background:var(--purple);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .nav-logo{display:flex;align-items:center;gap:12px;cursor:pointer}
+  .nav-logo-img{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+  .nav-logo-img .initials{font-size:13px;font-weight:600;color:var(--purple)}
+  .nav-title strong{display:block;color:#fff;font-size:14px;font-weight:600}
+  .nav-title small{color:rgba(255,255,255,0.65);font-size:11px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,0.82);font-size:13px;padding:8px 14px;border-radius:6px;transition:background .18s;cursor:pointer}
+  .nav-links a:hover{background:rgba(255,255,255,0.12);color:#fff}
+  .nav-burger{display:none;background:none;border:none;cursor:pointer;padding:6px}
+  .nav-burger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;margin:4px 0}
+  .nav-drawer{display:none;background:var(--purple-dk);padding:12px 20px 20px;flex-direction:column;gap:4px}
+  .nav-drawer a{color:rgba(255,255,255,0.85);font-size:14px;padding:10px 12px;border-radius:6px;display:block}
+  .nav-drawer.open{display:flex}
+
+  .back-bar{background:var(--purple);padding:10px 40px}
+  .back-bar a{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.85);font-size:12px;font-weight:500}
+  .hero-sm{background:var(--purple);padding:48px 40px 40px;text-align:center}
+  .hero-sm h1{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,40px);color:#fff;margin-bottom:14px}
+  .hero-sm p{color:rgba(255,255,255,.75);font-size:15px;line-height:1.7;max-width:560px;margin:0 auto}
+  .hero-img{width:100%;max-height:340px;object-fit:cover}
+
+  .section{padding:56px 40px}
+  .section-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:10px}
+  .section h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.25}
+  .lead{font-size:15px;color:var(--muted);line-height:1.7}
+  .divider{border:none;border-top:1px solid var(--border)}
+
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:28px}
+  .stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;text-align:center}
+  .stat-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:600;color:var(--purple);margin-bottom:6px}
+  .stat-label{font-size:12px;color:var(--muted);line-height:1.5}
+
+  .myth-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+  .myth-box{border-radius:var(--radius-lg);padding:20px}
+  .myth-box h4{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  .myth-box p{font-size:13px;line-height:1.65}
+
+  /* ALERT BOX */
+  .alert-box{background:#fce4ec;border-left:4px solid #c62828;border-radius:var(--radius-lg);padding:20px 24px;margin-top:24px}
+  .alert-box h3{font-size:14px;font-weight:700;color:#c62828;margin-bottom:8px}
+  .alert-box p{font-size:13px;color:#7f0000;line-height:1.65}
+
+  .acc-item{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:10px}
+  .acc-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;gap:12px}
+  .acc-head:hover{background:var(--bg)}
+  .acc-num{width:28px;height:28px;border-radius:50%;background:var(--purple-lt);color:var(--purple);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+  .acc-title{font-size:14px;font-weight:500;color:var(--text);flex:1}
+  .acc-arr{width:28px;height:28px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted);flex-shrink:0}
+  .acc-body{display:none;padding:14px 20px;font-size:13px;color:var(--muted);line-height:1.75;border-top:1px solid var(--bg)}
+
+  .convo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:24px}
+  .convo-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;display:flex;gap:12px;align-items:flex-start}
+  .convo-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+  .convo-card p{font-size:13px;color:var(--muted);line-height:1.6}
+
+  .flag-list{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:10px}
+  .flag-list li{display:flex;align-items:flex-start;gap:12px;background:#fff3e0;border-radius:var(--radius);padding:14px 16px;font-size:13px;color:#e65100;line-height:1.55}
+  .flag-list li::before{content:'⚠';flex-shrink:0}
+
+  /* PLATFORM CHIPS */
+  .platform-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:24px}
+  .platform-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px}
+  .platform-card h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .platform-card p{font-size:12px;color:var(--muted);line-height:1.55}
+
+  .ext-link{background:#EEEDFE;border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;margin-bottom:10px;transition:opacity .18s}
+  .ext-link:hover{opacity:.85}
+  .ext-link h3{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+  .ext-link p{font-size:12px;color:var(--muted);line-height:1.5}
+  .ext-link span{font-size:11px;color:var(--purple);font-weight:500;margin-top:6px;display:inline-block}
+
+  .download-item{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:10px}
+  .download-item-left{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:var(--text)}
+  .download-btn{background:var(--purple);color:#fff;font-size:12px;font-weight:600;padding:8px 16px;border-radius:20px;white-space:nowrap}
+
+  .contact-bar{background:var(--purple);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 40px;flex-wrap:wrap}
+  .contact-info h3{font-size:15px;font-weight:600;color:#fff;margin-bottom:3px}
+  .contact-info p{font-size:13px;color:rgba(255,255,255,.7)}
+  .contact-email{background:#fff;color:var(--purple);font-size:13px;font-weight:600;padding:10px 22px;border-radius:24px;white-space:nowrap}
+  footer{background:var(--purple-dk);color:rgba(255,255,255,.6);text-align:center;padding:20px;font-size:12px}
+  footer nav{margin-top:8px;display:flex;justify-content:center;gap:20px}
+  footer a{color:rgba(255,255,255,.5)} footer a:hover{color:#fff}
+
+  @media(max-width:640px){
+    .lang-bar,.nav,.back-bar,.section,.contact-bar{padding-left:16px;padding-right:16px}
+    .nav-links{display:none} .nav-burger{display:block}
+    .myth-grid{grid-template-columns:1fr}
+    .stat-grid{grid-template-columns:1fr 1fr}
+    .hero-sm{padding:36px 16px 32px}
+    .platform-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="lang-bar">
+  <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+  <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+</div>
+<nav class="nav">
+  <a class="nav-logo" href="../index.html">
+    <div class="nav-logo-img"><span class="initials">PC</span></div>
+    <div class="nav-title"><strong>PCIS Family Hub</strong><small>Senior</small></div>
+  </a>
+  <div class="nav-links">
+    <a href="../senior.html">Senior</a>
+    <a href="../index.html">Hub</a>
+  </div>
+  <button class="nav-burger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="../senior.html" onclick="closeDrawer()">Senior</a>
+  <a href="../index.html" onclick="closeDrawer()">Hub</a>
+</div>
+
+<div class="back-bar"><a href="../senior.html">← <span data-lang="es">Volver a Senior</span><span data-lang="en">Back to Senior</span></a></div>
+
+<section class="hero-sm">
+  <h1>📱 <span data-lang="es">Vida Digital</span><span data-lang="en">Digital Life</span></h1>
+  <p data-lang="es">Para adolescentes y familias de 7.° a 12.° grado. Redes sociales, IA, huella digital, salud mental y cómo navegar el mundo digital con inteligencia.</p>
+  <p data-lang="en">For teens and families in grades 7–12. Social media, AI, digital footprint, mental health, and how to navigate the digital world with intention.</p>
+</section>
+<img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80" alt="Adolescentes con tecnología" class="hero-img" onerror="this.style.display='none'">
+
+<!-- DATOS CLAVE -->
+<section class="section">
+  <p class="section-label"><span data-lang="es">Lo que dice la investigación</span><span data-lang="en">What the research says</span></p>
+  <h2><span data-lang="es">Números que toda familia debe conocer</span><span data-lang="en">Numbers every family should know</span></h2>
+  <p class="lead"><span data-lang="es">Datos del Common Sense Census, el Youth AI Safety Institute y estudios de Hopelab y Common Sense Media.</span><span data-lang="en">Data from the Common Sense Census, Youth AI Safety Institute, and Hopelab and Common Sense Media studies.</span></p>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-num">8h 39m</div><div class="stat-label"><span data-lang="es">promedio diario de pantallas de entretenimiento en adolescentes (Census 2021)</span><span data-lang="en">average daily entertainment screen time for teens (2021 Census)</span></div></div>
+    <div class="stat-card"><div class="stat-num">7 de 10</div><div class="stat-label"><span data-lang="es">jóvenes han usado IA generativa; el 53% para tareas escolares (Common Sense, 2024)</span><span data-lang="en">youth have used generative AI; 53% use it for homework (Common Sense, 2024)</span></div></div>
+    <div class="stat-card"><div class="stat-num">72%</div><div class="stat-label"><span data-lang="es">de adolescentes ha usado compañeros de IA — pero Common Sense los califica como riesgo inaceptable para menores</span><span data-lang="en">of teens have used AI companions — but Common Sense rates them unacceptable risk for minors</span></div></div>
+    <div class="stat-card"><div class="stat-num">74%</div><div class="stat-label"><span data-lang="es">de jóvenes LGBTQ+ dice que las redes sociales combaten su soledad (Hopelab/Common Sense, 2024)</span><span data-lang="en">of LGBTQ+ youth say social media combats loneliness (Hopelab/Common Sense, 2024)</span></div></div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- MITO vs HECHO -->
+<section class="section" style="background:var(--bg)">
+  <p class="section-label"><span data-lang="es">Mito vs. Realidad</span><span data-lang="en">Myth vs. Fact</span></p>
+  <h2><span data-lang="es">Lo que creemos vs. lo que dice la ciencia</span><span data-lang="en">What we believe vs. what the science says</span></h2>
+  <div class="myth-grid">
+    <div class="myth-box" style="background:#fce4ec">
+      <h4 style="color:#c62828">❌ <span data-lang="es">Mito</span><span data-lang="en">Myth</span></h4>
+      <p style="color:#7f0000"><span data-lang="es">Las redes sociales son simplemente malas para los adolescentes.</span><span data-lang="en">Social media is simply bad for teenagers.</span></p>
+    </div>
+    <div class="myth-box" style="background:#e8f5e9">
+      <h4 style="color:#1b5e20">✅ <span data-lang="es">Realidad</span><span data-lang="en">Fact</span></h4>
+      <p style="color:#1b5e20"><span data-lang="es">Son un "arma de doble filo" (Hopelab/Common Sense, 2024): perjudican a algunos y ayudan a otros. El 74% de jóvenes LGBTQ+ las valora enormemente. Lo que importa es cómo, cuánto y con qué propósito se usan.</span><span data-lang="en">They're a "double-edged sword" (Hopelab/Common Sense, 2024): harmful for some, helpful for others. 74% of LGBTQ+ youth value them greatly. What matters is how, how much, and with what purpose they're used.</span></p>
+    </div>
+    <div class="myth-box" style="background:#fce4ec">
+      <h4 style="color:#c62828">❌ <span data-lang="es">Mito</span><span data-lang="en">Myth</span></h4>
+      <p style="color:#7f0000"><span data-lang="es">Los colegios no pueden saber si un estudiante usó IA en sus tareas.</span><span data-lang="en">Schools can't tell if a student used AI on their assignments.</span></p>
+    </div>
+    <div class="myth-box" style="background:#e8f5e9">
+      <h4 style="color:#1b5e20">✅ <span data-lang="es">Realidad</span><span data-lang="en">Fact</span></h4>
+      <p style="color:#1b5e20"><span data-lang="es">Las herramientas de detección mejoran constantemente. Más importante: el 46% de los estudiantes que usaron IA en tareas lo hicieron sin permiso del docente. La honestidad académica es un valor, no solo una regla.</span><span data-lang="en">Detection tools keep improving. More importantly: 46% of students who used AI on assignments did so without teacher permission. Academic honesty is a value, not just a rule.</span></p>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- REDES SOCIALES -->
+<section class="section">
+  <p class="section-label"><span data-lang="es">Redes sociales</span><span data-lang="en">Social media</span></p>
+  <h2><span data-lang="es">Lo que toda familia debe entender por plataforma</span><span data-lang="en">What every family should understand by platform</span></h2>
+  <p class="lead" style="margin-bottom:24px"><span data-lang="es">Los adolescentes promedian 8 horas y media de pantallas de entretenimiento al día. El 84% ha usado redes sociales, pero solo el 34% dice que las disfruta "mucho".</span><span data-lang="en">Teens average 8.5 hours of daily entertainment screen time. 84% have used social media, but only 34% say they enjoy it "a lot."</span></p>
+  <div class="platform-grid">
+    <div class="platform-card">
+      <h3>🎵 TikTok</h3>
+      <p><span data-lang="es">Límite predeterminado de 60 minutos para menores de 18. Algoritmo muy efectivo para mantener a los usuarios en la app. Herramienta "Family Pairing" disponible para padres.</span><span data-lang="en">60-minute default limit for under-18s. Very effective algorithm at keeping users on the app. "Family Pairing" tool available for parents.</span></p>
+    </div>
+    <div class="platform-card">
+      <h3>📸 Instagram</h3>
+      <p><span data-lang="es">Las "Snapstreaks" crean presión de responder constantemente. Enfoque en imagen fomenta la comparación. Common Sense recomienda: 15–16 años como mínimo.</span><span data-lang="en">Focus on image drives comparison culture. Common Sense recommends: minimum ages 15–16.</span></p>
+    </div>
+    <div class="platform-card">
+      <h3>👻 Snapchat</h3>
+      <p><span data-lang="es">Los mensajes desaparecen, dificultando la supervisión. Las "Snapstreaks" y "Charms" presionan a responder constantemente. Requiere conversación activa sobre límites.</span><span data-lang="en">Disappearing messages make oversight harder. Snapstreaks and Charms pressure constant replies. Requires active conversation about boundaries.</span></p>
+    </div>
+    <div class="platform-card">
+      <h3>▶️ YouTube</h3>
+      <p><span data-lang="es">La plataforma más usada por adolescentes. El sistema de recomendaciones puede llevar a cámaras de eco. Usar listas de reproducción propias ayuda a mantener el control.</span><span data-lang="en">The most popular platform among teens. Recommendation systems can lead to echo chambers. Using own playlists helps maintain control.</span></p>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- TEMAS CLAVE ACCORDION -->
+<section class="section" style="background:var(--bg)">
+  <p class="section-label"><span data-lang="es">Temas esenciales</span><span data-lang="en">Key topics</span></p>
+  <h2><span data-lang="es">Temas profundos para Senior</span><span data-lang="en">In-depth topics for Senior</span></h2>
+
+  <!-- Salud mental -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">🧠</div>
+      <span class="acc-title"><span data-lang="es">Salud mental y redes sociales</span><span data-lang="en">Mental health and social media</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es">Del informe de Common Sense <em>"Teens and Mental Health: How Girls Really Feel About Social Media"</em> (2023, más de 1,300 chicas):</span><span data-lang="en">From Common Sense's <em>"Teens and Mental Health: How Girls Really Feel About Social Media"</em> (2023, 1,300+ girls):</span></p>
+      <ul style="margin-top:10px;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)">
+        <li><span data-lang="es">Entre chicas con síntomas depresivos moderados a graves: <strong>75% en Instagram</strong> y <strong>69% en TikTok</strong> reportan encontrar contenido problemático sobre suicidio al menos mensualmente.</span><span data-lang="en">Among girls with moderate-to-severe depressive symptoms: <strong>75% on Instagram</strong> and <strong>69% on TikTok</strong> report seeing problematic suicide-related content at least monthly.</span></li>
+        <li><span data-lang="es">El <strong>38%</strong> de las chicas encuestadas reportó síntomas de depresión.</span><span data-lang="en"><strong>38%</strong> of girls surveyed reported symptoms of depression.</span></li>
+        <li><span data-lang="es">Comparación social negativa a diario: Instagram (26%), TikTok (25%), Snapchat (22%).</span><span data-lang="en">Daily negative social comparison: Instagram (26%), TikTok (25%), Snapchat (22%).</span></li>
+        <li><span data-lang="es">El lado positivo: el <strong>74% de jóvenes LGBTQ+</strong> valora las redes para combatir la soledad.</span><span data-lang="en">The upside: <strong>74% of LGBTQ+ youth</strong> value social media for combating loneliness.</span></li>
+      </ul>
+      <p style="margin-top:12px;font-size:13px;color:var(--muted)"><strong><span data-lang="es">Mensaje clave:</span><span data-lang="en">Key message:</span></strong> <span data-lang="es">Los adolescentes que ya enfrentan desafíos de salud mental tienen más probabilidad de tener experiencias negativas — pero también valoran más los beneficios comunitarios. La conversación, no la prohibición, es la mejor herramienta.</span><span data-lang="en">Teens already dealing with mental-health challenges are more likely to have negative experiences — but also more likely to value the community benefits. Conversation, not banning, is the best tool.</span></p>
+    </div>
+  </div>
+
+  <!-- Huella digital -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">👣</div>
+      <span class="acc-title"><span data-lang="es">Huella digital — universidades y empleadores</span><span data-lang="en">Digital footprint — colleges and employers</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es">La vida digital es <strong>pública y permanente</strong>. Según la encuesta de Kaplan a oficiales de admisiones universitarias (2024): el <strong>67%</strong> considera que revisar las redes de un aspirante es "juego limpio", pero solo el <strong>28%</strong> dice haberlo hecho realmente — y cuando lo hacen, es más probable que encuentren algo negativo.</span><span data-lang="en">Digital life is <strong>public and permanent</strong>. Per Kaplan's survey of college admissions officers (2024): <strong>67%</strong> believe checking an applicant's social media is "fair game," but only <strong>28%</strong> say they've actually done it — and when they do, they're more likely to find something that counts against a candidate.</span></p>
+      <p style="margin-top:10px;font-size:13px;color:var(--muted)"><span data-lang="es">El mensaje no es el pánico — es el hábito: trata cada publicación pública como algo que podría verse. Tu huella digital es una oportunidad de mostrar lo mejor de ti.</span><span data-lang="en">The message isn't panic — it's habit: treat every public post as something that could be seen. Your digital footprint is a chance to show the best of who you are.</span></p>
+      <p style="margin-top:10px;font-size:13px;color:var(--muted)"><strong>Tips:</strong> <span data-lang="es">Hazte una búsqueda en Google, revisa y ajusta la privacidad de tus cuentas, borra publicaciones viejas que no te representen. Los screenshots hacen que incluso las cuentas "privadas" sean semi-públicas.</span><span data-lang="en">Google yourself, review and tighten account privacy, clean up old posts that don't represent you. Screenshots make even "private" accounts semi-public.</span></p>
+    </div>
+  </div>
+
+  <!-- IA generativa -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">🤖</div>
+      <span class="acc-title"><span data-lang="es">IA generativa — ChatGPT, Claude, Gemini</span><span data-lang="en">Generative AI — ChatGPT, Claude, Gemini</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es">El 7 de cada 10 jóvenes ha usado IA generativa; el 53% para tareas escolares; el 40% para trabajos escolares y <strong>el 46% de ellos lo hizo sin permiso del docente</strong>. La pregunta clave: <em>"¿Esta IA me está ayudando a aprender, o solo a terminar?"</em></span><span data-lang="en">7 in 10 youth have used generative AI; 53% for homework; 40% for school assignments and <strong>46% of those did so without teacher permission.</strong> The key question: <em>"Is this AI helping me learn, or just helping me finish?"</em></span></p>
+      <p style="margin-top:12px;font-size:13px;color:var(--muted)"><strong><span data-lang="es">Evaluaciones del Youth AI Safety Institute (2026):</span><span data-lang="en">Youth AI Safety Institute ratings (2026):</span></strong></p>
+      <ul style="margin-top:8px;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)">
+        <li><strong>Claude (Anthropic):</strong> <span data-lang="es">Riesgo moderado — con salvaguardas significativas.</span><span data-lang="en">Moderate risk — with meaningful safety strengths.</span></li>
+        <li><strong>Grok (xAI):</strong> <span data-lang="es">Riesgo inaceptable para menores.</span><span data-lang="en">Unacceptable risk for minors.</span></li>
+        <li><strong>Google AI Overviews:</strong> <span data-lang="es">Riesgo inaceptable — no lo suficientemente seguro, confiable o preciso para ser la fuente de respuestas predeterminada de los niños.</span><span data-lang="en">Unacceptable risk — not safe, reliable, or accurate enough to be kids' default answer machine.</span></li>
+      </ul>
+      <p style="margin-top:12px;font-size:13px;color:var(--muted)"><span data-lang="es">Riesgos adicionales: la IA "alucina" (inventa hechos); las herramientas de imagen/video facilitan los deepfakes. Verifica las políticas de IA de PCIS antes de usar cualquier herramienta en tareas.</span><span data-lang="en">Additional risks: AI "hallucinates" (makes up facts); image/video tools make deepfakes easy. Check PCIS's AI policies before using any tool on assignments.</span></p>
+    </div>
+  </div>
+
+  <!-- Compañeros de IA -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">💔</div>
+      <span class="acc-title"><span data-lang="es">Compañeros de IA — una línea roja clara</span><span data-lang="en">AI companions — a clear red line</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="alert-box" style="margin-top:0;margin-bottom:14px">
+        <h3>⚠ <span data-lang="es">Common Sense recomienda: ningún menor de 18 debe usar compañeros sociales de IA</span><span data-lang="en">Common Sense recommends: no one under 18 should use social AI companions</span></h3>
+        <p><span data-lang="es">Character.AI, Nomi, Replika y Meta AI fueron calificados como "riesgo inaceptable" para menores (evaluación con el Brainstorm Lab de Stanford Medicine). Están diseñados para crear apego emocional y dependencia.</span><span data-lang="en">Character.AI, Nomi, Replika, and Meta AI were rated "unacceptable risk" for minors (assessment with Stanford Medicine's Brainstorm Lab). They are engineered to create emotional attachment and dependency.</span></p>
+      </div>
+      <p><span data-lang="es">Aun así, el <strong>72% de los adolescentes</strong> ha usado compañeros de IA, el 52% son usuarios regulares, y el <strong>33% ha elegido hablar de temas serios con una IA en lugar de una persona real</strong>.</span><span data-lang="en">Yet <strong>72% of teens</strong> have used AI companions, 52% are regular users, and <strong>33% have chosen to discuss serious matters with an AI companion instead of a real person.</strong></span></p>
+    </div>
+  </div>
+
+  <!-- Ciberacoso -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">🚨</div>
+      <span class="acc-title"><span data-lang="es">Ciberacoso — cómo reconocerlo y qué hacer</span><span data-lang="en">Cyberbullying — how to recognize it and what to do</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es">El ciberacoso son palabras o conductas hirientes, <strong>repetidas y no deseadas</strong>, que ocurren en línea. Método <strong>STOP</strong>:</span><span data-lang="en">Cyberbullying is repeated, unwanted hurtful words or behavior online. The <strong>STOP</strong> method:</span></p>
+      <ul style="margin-top:10px;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)">
+        <li><strong>S</strong> — <span data-lang="es">Stop: deja de usar el dispositivo.</span><span data-lang="en">Stop using the device.</span></li>
+        <li><strong>T</strong> — <span data-lang="es">Tell: dile a un adulto de confianza.</span><span data-lang="en">Tell a trusted adult.</span></li>
+        <li><strong>O</strong> — <span data-lang="es">OK: obtén el visto bueno de un adulto antes de volver.</span><span data-lang="en">Get the OK from an adult before going back online.</span></li>
+        <li><strong>P</strong> — <span data-lang="es">Pause: haz una pausa para pensar cómo te sientes.</span><span data-lang="en">Pause to think about how you feel.</span></li>
+      </ul>
+      <p style="margin-top:12px;font-size:13px;color:var(--muted)"><span data-lang="es">Pasos prácticos: toma capturas de pantalla como evidencia, bloquea a la persona, repórtalo en la plataforma y al colegio. Para amenazas reales: CyberTipline 1-800-843-5678.</span><span data-lang="en">Practical steps: take screenshots as evidence, block the person, report on the platform and to the school. For real threats: CyberTipline 1-800-843-5678.</span></p>
+    </div>
+  </div>
+
+  <!-- Privacidad y datos -->
+  <div class="acc-item">
+    <div class="acc-head" onclick="toggleAcc(this)">
+      <div class="acc-num">🔐</div>
+      <span class="acc-title"><span data-lang="es">Privacidad y datos — lo que las apps recopilan</span><span data-lang="en">Privacy and data — what apps collect</span></span>
+      <span class="acc-arr">+</span>
+    </div>
+    <div class="acc-body">
+      <p><span data-lang="es">Las apps recopilan ubicación, comportamiento, contactos y muchas venden esos datos a anunciantes externos — así ganan dinero. Protégete:</span><span data-lang="en">Apps collect location, behavior, contacts — and many sell that data to third-party advertisers. That's how a lot of them make money. Protect yourself:</span></p>
+      <ul style="margin-top:10px;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)">
+        <li><span data-lang="es">Activa la ubicación solo "cuando se usa la app" — nunca "siempre".</span><span data-lang="en">Set location to "only while using the app" — never "always."</span></li>
+        <li><span data-lang="es">Usa navegadores y buscadores que protejan la privacidad.</span><span data-lang="en">Use privacy-protecting browsers and search engines.</span></li>
+        <li><span data-lang="es">Rechaza las cookies de rastreo.</span><span data-lang="en">Reject tracking cookies.</span></li>
+        <li><span data-lang="es">Revisa qué permisos tiene cada app — y revoca los que no son necesarios.</span><span data-lang="en">Review each app's permissions — and revoke unnecessary ones.</span></li>
+        <li><span data-lang="es">Consulta las calificaciones de privacidad de Common Sense antes de descargar.</span><span data-lang="en">Check Common Sense's privacy ratings before downloading.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SEÑALES DE ALERTA -->
+<section class="section">
+  <p class="section-label"><span data-lang="es">Señales de alerta</span><span data-lang="en">Red flags</span></p>
+  <h2><span data-lang="es">¿Cuándo debo preocuparme?</span><span data-lang="en">When should I be concerned?</span></h2>
+  <ul class="flag-list">
+    <li><span data-lang="es">Aislamiento de amigos y actividades presenciales después de usar una app específica.</span><span data-lang="en">Withdrawal from offline activities and friends after using a specific app.</span></li>
+    <li><span data-lang="es">Pérdida de sueño o angustia vinculada al uso de redes sociales.</span><span data-lang="en">Sleep loss or distress tied to social media use.</span></li>
+    <li><span data-lang="es">Secretismo sobre con quién (o qué) están hablando.</span><span data-lang="en">Secrecy about who (or what) they're talking to.</span></li>
+    <li><span data-lang="es">Preferir hablar con una IA en lugar de personas reales sobre temas importantes.</span><span data-lang="en">Preferring to talk to an AI rather than real people about important matters.</span></li>
+    <li><span data-lang="es">Angustia emocional vinculada a un chatbot.</span><span data-lang="en">Emotional distress tied to a chatbot.</span></li>
+    <li><span data-lang="es">Un extraño en línea presiona para pasar a una app privada.</span><span data-lang="en">A stranger online pushing to move to a private app.</span></li>
+  </ul>
+</section>
+<hr class="divider">
+
+<!-- CONVERSACIONES -->
+<section class="section" style="background:var(--bg)">
+  <p class="section-label"><span data-lang="es">Para iniciar la conversación</span><span data-lang="en">Conversation starters</span></p>
+  <h2><span data-lang="es">¿Cómo hablo de esto con mi adolescente?</span><span data-lang="en">How do I talk to my teen about this?</span></h2>
+  <p class="lead"><span data-lang="es">Preguntas que abren diálogo real — no debates ni interrogatorios.</span><span data-lang="en">Questions that open real dialogue — not debates or interrogations.</span></p>
+  <div class="convo-grid">
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">¿Qué plataformas te hacen sentir bien y cuáles te dejan agotado/a?</span><span data-lang="en">Which platforms make you feel good, and which leave you drained?</span></p></div>
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">¿Cómo decides qué publicar y qué mantener en privado?</span><span data-lang="en">How do you decide what to post and what to keep private?</span></p></div>
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">¿Has visto contenido generado por IA o deepfakes? ¿Cómo lo supiste?</span><span data-lang="en">Have you seen AI-generated content or deepfakes? How could you tell?</span></p></div>
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">¿Alguna vez usas la IA como si fuera un amigo o consejero?</span><span data-lang="en">Do you ever use AI like a friend or advisor?</span></p></div>
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">¿Cuáles son las reglas del colegio sobre la IA en las tareas?</span><span data-lang="en">What are the school's rules about AI on assignments?</span></p></div>
+    <div class="convo-card"><span class="convo-icon">💬</span><p><span data-lang="es">Si alguien en línea te hiciera sentir incómodo/a, ¿qué harías?</span><span data-lang="en">If someone online made you uncomfortable, what would you do?</span></p></div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- RECURSOS DESCARGABLES -->
+<section class="section">
+  <p class="section-label"><span data-lang="es">Recursos descargables</span><span data-lang="en">Downloadable resources</span></p>
+  <h2><span data-lang="es">Materiales para familias</span><span data-lang="en">Materials for families</span></h2>
+  <div style="margin-top:24px">
+    <div class="download-item">
+      <div class="download-item-left">📄 <span data-lang="es">Guía de vida digital para familias Senior</span><span data-lang="en">Digital life family guide — Senior</span></div>
+      <a href="../404.html" class="download-btn"><span data-lang="es">Descargar</span><span data-lang="en">Download</span></a>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- RECURSOS EXTERNOS -->
+<section class="section" style="background:var(--bg)">
+  <p class="section-label"><span data-lang="es">Recursos externos recomendados</span><span data-lang="en">Recommended external resources</span></p>
+  <h2><span data-lang="es">Más información para familias y estudiantes</span><span data-lang="en">More information for families and students</span></h2>
+  <div style="margin-top:24px">
+    <a href="https://institute.commonsensemedia.org/risk-assessments" target="_blank" rel="noopener" class="ext-link">
+      <div style="font-size:24px;flex-shrink:0">🤖</div>
+      <div><h3><span data-lang="es">Evaluaciones de riesgo de IA — Youth AI Safety Institute</span><span data-lang="en">AI Risk Assessments — Youth AI Safety Institute</span></h3><p><span data-lang="es">Evaluaciones actualizadas de ChatGPT, Claude, Grok, Google AI, Meta AI y más para menores.</span><span data-lang="en">Updated assessments of ChatGPT, Claude, Grok, Google AI, Meta AI and more for minors.</span></p><span>institute.commonsensemedia.org →</span></div>
+    </a>
+    <a href="https://www.commonsensemedia.org/articles/parents-ultimate-guide-to-social-media" target="_blank" rel="noopener" class="ext-link" style="background:#e8f5e9">
+      <div style="font-size:24px;flex-shrink:0">📱</div>
+      <div><h3><span data-lang="es">Guía definitiva de redes sociales — Common Sense Media</span><span data-lang="en">Parents' Ultimate Guide to Social Media — Common Sense Media</span></h3><p><span data-lang="es">TikTok, Instagram, Snapchat y más — guías por plataforma para padres.</span><span data-lang="en">TikTok, Instagram, Snapchat and more — platform-by-platform guides for parents.</span></p><span>commonsensemedia.org →</span></div>
+    </a>
+    <a href="https://www.commonsensemedia.org/articles/parents-ultimate-guide-to-generative-ai" target="_blank" rel="noopener" class="ext-link" style="background:#fff8e1">
+      <div style="font-size:24px;flex-shrink:0">💡</div>
+      <div><h3><span data-lang="es">Guía de IA generativa para padres</span><span data-lang="en">Parents' Guide to Generative AI</span></h3><p><span data-lang="es">Cómo hablar con tu adolescente sobre ChatGPT, integridad académica y uso responsable.</span><span data-lang="en">How to talk with your teen about ChatGPT, academic integrity and responsible use.</span></p><span>commonsensemedia.org →</span></div>
+    </a>
+    <a href="https://www.commonsensemedia.org/research/teens-and-mental-health-how-girls-really-feel-about-social-media" target="_blank" rel="noopener" class="ext-link" style="background:#fce4ec">
+      <div style="font-size:24px;flex-shrink:0">🧠</div>
+      <div><h3><span data-lang="es">Salud mental de adolescentes y redes sociales</span><span data-lang="en">Teens' Mental Health and Social Media</span></h3><p><span data-lang="es">Investigación completa de Common Sense sobre cómo las chicas realmente se sienten con las redes sociales.</span><span data-lang="en">Complete Common Sense research on how girls really feel about social media.</span></p><span>commonsensemedia.org →</span></div>
+    </a>
+  </div>
+</section>
+<hr class="divider">
+
+<div class="contact-bar">
+  <div class="contact-info">
+    <h3><span data-lang="es">¿Tienes preguntas sobre este tema?</span><span data-lang="en">Have questions about this topic?</span></h3>
+    <p><span data-lang="es">La consejera escolar está aquí para apoyarte.</span><span data-lang="en">The school counselor is here to support you.</span></p>
+  </div>
+  <a class="contact-email" href="../senior.html">← <span data-lang="es">Volver a Senior</span><span data-lang="en">Back to Senior</span></a>
+</div>
+<footer><p>© 2026 Puntacana International School · PCIS Family Hub</p><nav><a href="../index.html">Hub</a><a href="../senior.html">Senior</a></nav></footer>
+
+<script>
+function setLang(l){document.body.classList.toggle('en',l==='en');document.getElementById('btn-es').classList.toggle('active',l==='es');document.getElementById('btn-en').classList.toggle('active',l==='en');localStorage.setItem('pcis-lang',l);}
+(function(){if(localStorage.getItem('pcis-lang')==='en')setLang('en');})();
+function toggleDrawer(){document.getElementById('nav-drawer').classList.toggle('open')}
+function closeDrawer(){document.getElementById('nav-drawer').classList.remove('open')}
+function toggleAcc(h){var b=h.nextElementSibling;var open=b.style.display==='block';b.style.display=open?'none':'block';h.querySelector('.acc-arr').textContent=open?'+':'−';}
+</script>
+</body></html>
